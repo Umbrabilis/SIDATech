@@ -1,18 +1,31 @@
 package com.example.taller2sidatech.Model.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
 import java.util.Date;
 
-public class Orden {
+@Entity
+@Table(name = "compras")
+public class Compra {
     public Integer id;
     public String numero;
     public Date fechaCreacion;
     public Date fechaRecibida;
     private double total;
 
-    public Orden() {
+    @ManyToOne
+    private Usuario usuario;
+
+    @OneToOne (mappedBy = "compra")
+    private DetalleCompra detalleCompra;
+
+    public Compra() {
     }
 
-    public Orden(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
+    public Compra(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
         this.id = id;
         this.numero = numero;
         this.fechaCreacion = fechaCreacion;
@@ -58,6 +71,22 @@ public class Orden {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public DetalleCompra getDetalleCompra() {
+        return detalleCompra;
+    }
+
+    public void setDetalleCompra(DetalleCompra detalleCompra) {
+        this.detalleCompra = detalleCompra;
     }
 
     @Override

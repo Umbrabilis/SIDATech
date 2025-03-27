@@ -1,12 +1,22 @@
 package com.example.taller2sidatech.Model.Entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "productos")
 public class Producto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
     private String descripcion;
     private String imagen;
     private Double precio;
     private int stock;
+
+    @ManyToOne
+    private Usuario usuario;
 
     public Producto() {
     }
@@ -66,6 +76,14 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
