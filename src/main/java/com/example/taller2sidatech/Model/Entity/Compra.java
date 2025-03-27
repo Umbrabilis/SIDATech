@@ -1,15 +1,15 @@
 package com.example.taller2sidatech.Model.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "compras")
 public class Compra {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
     public String numero;
     public Date fechaCreacion;

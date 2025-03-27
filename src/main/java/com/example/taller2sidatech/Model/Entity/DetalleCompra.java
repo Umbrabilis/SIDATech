@@ -17,7 +17,7 @@ public class DetalleCompra {
     @OneToOne
     private Compra compra;
 
-    @OneToOne
+    @ManyToOne
     private Producto producto;
 
     public DetalleCompra() {
