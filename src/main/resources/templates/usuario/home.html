@@ -21,9 +21,10 @@
 
 <body>
 
-    <!-- Navigation -->
-    <div th:include="administrador/template_admin::header"></div>
+  <!-- Navigation -->
+  <div th:include="usuario/template_usuario::header">
 
+  </div>
     <!-- Page Content -->
     <div class="container">
 
@@ -43,24 +44,21 @@
               <p class="card-text" th:text="${producto.nombre}"></p>
             </div>
             <div class="card-footer">
-              <a href="productohome.html" class="btn btn-success">Ver producto</a>
+              <a th:href="@{/productohome/{id} (id=${producto.id})}" class="btn btn-success">Ver producto</a>
             </div>
           </div>
         </div>
       </div>
-      <!-- /.row -->
-
-    </div>
     <!-- /.container -->
 
     <!-- Footer -->
-    <div th:include="administrador/template_admin::footer"></div>
+  <div th:include="usuario/template_usuario::footer"></div>
 
 
-    <!-- Bootstrap core JavaScript -->
-    <script th:src="@{vendor/jquery/jquery.min.js}"></script>
-    <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-  </body>
+</body>
 
   </html>
