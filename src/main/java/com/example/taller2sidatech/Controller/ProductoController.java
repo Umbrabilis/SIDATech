@@ -3,16 +3,16 @@ package com.example.taller2sidatech.Controller;
 import com.example.taller2sidatech.Model.Entity.Producto;
 import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.ProductoService;
+import com.example.taller2sidatech.Service.UploadFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -23,6 +23,9 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private UploadFileService upload;
 
     @GetMapping("")
     public String show(Model model ){
@@ -36,10 +39,17 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto){
+    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
         LOGGER.info("Este es el objeto producto: " + producto);
         Usuario usuario = new Usuario(1, "", "", "", "", "", "", "");
         producto.setUsuario(usuario);
+
+        //imagen
+        if (producto.getId()==null){
+            String nombreImagen = upload.saveImage(file);
+            producto.setImagen(nombreImagen);
+        }
+
         productoService.save(producto);
         return "redirect:/productos";
     }
@@ -55,13 +65,38 @@ public class ProductoController {
     }
 
     @PostMapping("/update")
-    public String update(Producto producto){
+    public String update(Producto producto,  @RequestParam("img") MultipartFile file) throws IOException {
+        if (file.isEmpty()){ //editamos producto sin cambiar imagen
+            Producto p = new Producto();
+            p = productoService.get(producto.getId()).get();
+            producto.setImagen(p.getImagen());
+        }
+        else { //editamos producto cambiando imagen
+            Producto p = new Producto();
+            p = productoService.get(producto.getId()).get();
+
+            if (!p.getImagen().equals("default.jpg")){
+                upload.deleteImage(p.getImagen());
+            }
+
+            String nombreImagen = upload.saveImage(file);
+            producto.setImagen(nombreImagen);
+        }
         productoService.update(producto);
+
         return "redirect:/productos";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id){
+    public String delete(@PathVariable Integer id) throws IOException {
+
+        Producto p = new Producto();
+        p = productoService.get(id).get();
+
+        if (!p.getImagen().equals("default.jpg")){
+            upload.deleteImage(p.getImagen());
+        }
+
         productoService.delete(id);
         return "redirect:/productos";
     }
