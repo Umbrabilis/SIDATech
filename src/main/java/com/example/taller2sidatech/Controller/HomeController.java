@@ -5,8 +5,7 @@ import com.example.taller2sidatech.Model.Entity.DetalleCompra;
 import com.example.taller2sidatech.Model.Entity.Producto;
 import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.IUsuarioService;
-import com.example.taller2sidatech.Service.ProductoService;
-import jdk.jfr.Registered;
+import com.example.taller2sidatech.Service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,7 @@ import java.util.Optional;
 public class HomeController {
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService IProductoService;
 
     @Autowired
     private IUsuarioService usuarioService;
@@ -32,7 +31,7 @@ public class HomeController {
     @GetMapping("")
     public String home(Model model) {
 
-        model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("productos", IProductoService.findAll());
         return "usuario/home";
     }
 
@@ -40,7 +39,7 @@ public class HomeController {
     public String productoHome(@PathVariable Integer id, Model model){
 
         Producto producto = new Producto();
-        Optional<Producto> productoOptional = productoService.get(id);
+        Optional<Producto> productoOptional = IProductoService.get(id);
         producto = productoOptional.get();
 
         model.addAttribute("producto", producto);
@@ -53,7 +52,7 @@ public class HomeController {
         Producto producto = new Producto();
         double sumaTotal=0;
 
-        Optional<Producto> optionalProducto = productoService.get(id);
+        Optional<Producto> optionalProducto = IProductoService.get(id);
         producto = optionalProducto.get();
 
         detalleCompra.setCantidad(cantidad);

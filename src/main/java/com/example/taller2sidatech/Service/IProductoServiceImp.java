@@ -1,42 +1,41 @@
 package com.example.taller2sidatech.Service;
 
-import com.example.taller2sidatech.Model.DAO.ProductoDao;
+import com.example.taller2sidatech.Model.DAO.IProductoDao;
 import com.example.taller2sidatech.Model.Entity.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductoServiceImp implements ProductoService {
+public class IProductoServiceImp implements IProductoService {
 
     @Autowired
-    private ProductoDao productoDao;
+    private IProductoDao IProductoDao;
 
     @Override
     public Producto save(Producto producto) {
-        return productoDao.save(producto);
+        return IProductoDao.save(producto);
     }
 
     @Override
     public Optional<Producto> get(Integer id) {
-        return productoDao.findById(id);
+        return IProductoDao.findById(id);
     }
 
     @Override
     public void update(Producto producto) {
-        productoDao.save(producto);
+        IProductoDao.save(producto);
     }
 
     @Override
     public void delete(Integer id) {
-        productoDao.deleteById(id);
+        IProductoDao.deleteById(id);
     }
 
     @Override
     public List<Producto> findAll() {
-        return productoDao.findAll();
+        return IProductoDao.findAll();
     }
 }

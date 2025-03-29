@@ -2,7 +2,7 @@ package com.example.taller2sidatech.Controller;
 
 import com.example.taller2sidatech.Model.Entity.Producto;
 import com.example.taller2sidatech.Model.Entity.Usuario;
-import com.example.taller2sidatech.Service.ProductoService;
+import com.example.taller2sidatech.Service.IProductoService;
 import com.example.taller2sidatech.Service.UploadFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +22,14 @@ public class ProductoController {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService IProductoService;
 
     @Autowired
     private UploadFileService upload;
 
     @GetMapping("")
     public String show(Model model ){
-        model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("productos", IProductoService.findAll());
         return "productos/show";
     }
 
@@ -50,14 +50,14 @@ public class ProductoController {
             producto.setImagen(nombreImagen);
         }
 
-        productoService.save(producto);
+        IProductoService.save(producto);
         return "redirect:/productos";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
         Producto producto = new Producto();
-        Optional<Producto> optionalProducto = productoService.get(id);
+        Optional<Producto> optionalProducto = IProductoService.get(id);
         producto= optionalProducto.get();
 
         model.addAttribute("producto", producto);
@@ -67,7 +67,7 @@ public class ProductoController {
     @PostMapping("/update")
     public String update(Producto producto,  @RequestParam("img") MultipartFile file) throws IOException {
         Producto p = new Producto();
-        p = productoService.get(producto.getId()).get();
+        p = IProductoService.get(producto.getId()).get();
 
         if (file.isEmpty()){ //editamos producto sin cambiar imagen
 
@@ -84,7 +84,7 @@ public class ProductoController {
         }
 
         producto.setUsuario(p.getUsuario());
-        productoService.update(producto);
+        IProductoService.update(producto);
 
         return "redirect:/productos";
     }
@@ -93,13 +93,13 @@ public class ProductoController {
     public String delete(@PathVariable Integer id) throws IOException {
 
         Producto p = new Producto();
-        p = productoService.get(id).get();
+        p = IProductoService.get(id).get();
 
         if (!p.getImagen().equals("default.jpg")){
             upload.deleteImage(p.getImagen());
         }
 
-        productoService.delete(id);
+        IProductoService.delete(id);
         return "redirect:/productos";
     }
 }
