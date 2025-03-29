@@ -3,6 +3,8 @@ package com.example.taller2sidatech.Controller;
 import com.example.taller2sidatech.Model.Entity.Compra;
 import com.example.taller2sidatech.Model.Entity.DetalleCompra;
 import com.example.taller2sidatech.Model.Entity.Producto;
+import com.example.taller2sidatech.Model.Entity.Usuario;
+import com.example.taller2sidatech.Service.IUsuarioService;
 import com.example.taller2sidatech.Service.ProductoService;
 import jdk.jfr.Registered;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,10 @@ public class HomeController {
     @Autowired
     private ProductoService productoService;
 
-    List<DetalleCompra> detalles = new ArrayList<>();
+    @Autowired
+    private IUsuarioService usuarioService;
+
+    List<DetalleCompra> detalles = new ArrayList<DetalleCompra>();
     Compra compra = new Compra();
 
     @GetMapping("")
@@ -57,12 +62,59 @@ public class HomeController {
         detalleCompra.setTotal(producto.getPrecio() * cantidad);
         detalleCompra.setProducto(producto);
 
-        detalles.add(detalleCompra);
+        //Verificar si el producto ya existe en el carrito
+        Integer idproducto = producto.getId();
+        boolean ingresado = detalles.stream().anyMatch(p -> p.getProducto().getId() == idproducto);
+        if (!ingresado){
+            detalles.add(detalleCompra);
+        }
+
+
         sumaTotal= detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
         compra.setTotal(sumaTotal);
         model.addAttribute("cart", detalles);
         model.addAttribute("compra", compra);
 
         return "usuario/carrito";
+    }
+
+    @GetMapping("/delete/cart/{id}")
+    public String deleteProductCart(@PathVariable Integer id, Model model) {
+
+        List<DetalleCompra> comprasNueva = new ArrayList<DetalleCompra>();
+
+        for (DetalleCompra detalleCompra : detalles) {
+            if (detalleCompra.getProducto().getId() != id) {
+                comprasNueva.add(detalleCompra);
+            }
+        }
+        //Nueva lista con productos restantes
+        detalles= comprasNueva;
+
+        double sumaTotal=0;
+        sumaTotal= detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
+        compra.setTotal(sumaTotal);
+        model.addAttribute("cart", detalles);
+        model.addAttribute("compra", compra);
+
+        return "usuario/carrito";
+    }
+
+    @GetMapping("/getCart")
+    public String getCart(Model model) {
+        model.addAttribute("cart", detalles);
+        model.addAttribute("compra", compra);
+        return "usuario/carrito";
+    }
+
+    @GetMapping("/order")
+    public String order(Model model) {
+
+        Usuario usuario = usuarioService.findById(1).get();
+
+        model.addAttribute("cart", detalles);
+        model.addAttribute("compra", compra);
+        model.addAttribute("usuario", usuario);
+        return "usuario/resumencompra";
     }
 }
