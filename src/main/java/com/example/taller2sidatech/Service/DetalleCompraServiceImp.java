@@ -15,4 +15,6 @@ public class DetalleCompraServiceImp implements IDetalleCompraService {
     public DetalleCompra save(DetalleCompra detalleCompra) {
         return detalleCompraDao.save(detalleCompra);
     }
+
+
 }

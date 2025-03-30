@@ -4,6 +4,8 @@ import com.example.taller2sidatech.Model.Entity.Compra;
 import com.example.taller2sidatech.Model.Entity.DetalleCompra;
 import com.example.taller2sidatech.Model.Entity.Producto;
 import com.example.taller2sidatech.Model.Entity.Usuario;
+import com.example.taller2sidatech.Service.ICompraService;
+import com.example.taller2sidatech.Service.IDetalleCompraService;
 import com.example.taller2sidatech.Service.IUsuarioService;
 import com.example.taller2sidatech.Service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,12 @@ public class HomeController {
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private ICompraService compraService;
+
+    @Autowired
+    private IDetalleCompraService detalleCompraService;
 
     List<DetalleCompra> detalles = new ArrayList<DetalleCompra>();
     Compra compra = new Compra();
@@ -115,5 +124,28 @@ public class HomeController {
         model.addAttribute("compra", compra);
         model.addAttribute("usuario", usuario);
         return "usuario/resumencompra";
+    }
+
+    @GetMapping("/saveOrder")
+    public String saveOrder() {
+        Date fechaCreacion = new Date();
+        compra.setFechaCreacion(fechaCreacion);
+        compra.setNumero(compraService.generarNumeroOrden());
+
+        Usuario usuario = usuarioService.findById(1).get();
+        compra.setUsuario(usuario);
+        compraService.save(compra);
+
+        //guardar detalles
+        for (DetalleCompra dt : detalles) {
+            dt.setCompra(compra);
+            detalleCompraService.save(dt);
+        }
+
+        //limpiar lista y orden
+        compra = new Compra();
+        detalles.clear();
+
+        return "redirect:/";
     }
 }
