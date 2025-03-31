@@ -3,6 +3,7 @@ package com.example.taller2sidatech.Model.Entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "compras")
@@ -19,8 +20,8 @@ public class Compra {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToMany (mappedBy = "compra")
-    private DetalleCompra detalleCompra;
+    @OneToMany(mappedBy = "compra")
+    private List<DetalleCompra> detalleCompras;
 
     public Compra() {
     }
@@ -81,12 +82,12 @@ public class Compra {
         return usuario;
     }
 
-    public DetalleCompra getDetalleCompra() {
-        return detalleCompra;
+    public List<DetalleCompra> getDetalleCompras() {
+        return detalleCompras;
     }
 
-    public void setDetalleCompra(DetalleCompra detalleCompra) {
-        this.detalleCompra = detalleCompra;
+    public void setDetalleCompras(List<DetalleCompra> detalleCompras) {
+        this.detalleCompras = detalleCompras;
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompraServiceImp implements ICompraService {
@@ -58,5 +59,10 @@ public class CompraServiceImp implements ICompraService {
     @Override
     public List<Compra> findByUsuario(Usuario usuario) {
         return compraDao.findByUsuario(usuario);
+    }
+
+    @Override
+    public Optional<Compra> findById(Integer id) {
+        return compraDao.findById(id);
     }
 }
