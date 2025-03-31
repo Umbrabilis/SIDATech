@@ -1,9 +1,12 @@
 package com.example.taller2sidatech.Controller;
 
+import com.example.taller2sidatech.Model.DAO.IUsuarioDao;
 import com.example.taller2sidatech.Model.Entity.Producto;
 import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.IProductoService;
+import com.example.taller2sidatech.Service.IUsuarioService;
 import com.example.taller2sidatech.Service.UploadFileService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class ProductoController {
     private IProductoService IProductoService;
 
     @Autowired
+    private IUsuarioService usuarioService;
+
+    @Autowired
     private UploadFileService upload;
 
     @GetMapping("")
@@ -39,9 +45,8 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
-        LOGGER.info("Este es el objeto producto: " + producto);
-        Usuario usuario = new Usuario(1, "", "", "", "", "", "", "");
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         producto.setUsuario(usuario);
 
         //imagen

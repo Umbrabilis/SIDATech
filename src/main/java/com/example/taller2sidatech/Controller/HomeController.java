@@ -8,6 +8,7 @@ import com.example.taller2sidatech.Service.ICompraService;
 import com.example.taller2sidatech.Service.IDetalleCompraService;
 import com.example.taller2sidatech.Service.IUsuarioService;
 import com.example.taller2sidatech.Service.IProductoService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +40,7 @@ public class HomeController {
     Compra compra = new Compra();
 
     @GetMapping("")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
 
         model.addAttribute("productos", IProductoService.findAll());
         return "usuario/home";
@@ -117,9 +118,9 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model) {
+    public String order(Model model, HttpSession session) {
 
-        Usuario usuario = usuarioService.findById(1).get();
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 
         model.addAttribute("cart", detalles);
         model.addAttribute("compra", compra);
@@ -128,12 +129,12 @@ public class HomeController {
     }
 
     @GetMapping("/saveOrder")
-    public String saveOrder() {
+    public String saveOrder(HttpSession session) {
         Date fechaCreacion = new Date();
         compra.setFechaCreacion(fechaCreacion);
         compra.setNumero(compraService.generarNumeroOrden());
 
-        Usuario usuario = usuarioService.findById(1).get();
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         compra.setUsuario(usuario);
         compraService.save(compra);
 
@@ -157,4 +158,5 @@ public class HomeController {
 
         return "usuario/home";
     }
+
 }

@@ -23,4 +23,9 @@ public class UsuarioServiceImp implements IUsuarioService {
         return IUsuarioDao.save(usuario);
     }
 
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        return IUsuarioDao.findByEmail(email);
+    }
+
 }
