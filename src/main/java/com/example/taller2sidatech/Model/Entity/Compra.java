@@ -19,7 +19,7 @@ public class Compra {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToOne (mappedBy = "compra")
+    @OneToMany (mappedBy = "compra")
     private DetalleCompra detalleCompra;
 
     public Compra() {

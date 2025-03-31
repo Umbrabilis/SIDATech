@@ -1,15 +1,19 @@
 package com.example.taller2sidatech.Controller;
 
+import com.example.taller2sidatech.Model.Entity.Compra;
 import com.example.taller2sidatech.Model.Entity.Usuario;
+import com.example.taller2sidatech.Service.ICompraService;
 import com.example.taller2sidatech.Service.IUsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,6 +22,9 @@ public class UsuarioController {
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private ICompraService compraService;
 
     @GetMapping("/registro")
     public String create(){
@@ -54,5 +61,18 @@ public class UsuarioController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/compras")
+    public String getCompras(HttpSession session, Model model) {
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
+
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+        List<Compra> compras = compraService.findByUsuario(usuario);
+        model.addAttribute("compras", compras);
+
+        return "usuario/compras";
+    }
+
+
 
 }

@@ -3,6 +3,7 @@ package com.example.taller2sidatech.Service;
 import com.example.taller2sidatech.Model.DAO.ICompraDao;
 import com.example.taller2sidatech.Model.DAO.IDetalleCompraDao;
 import com.example.taller2sidatech.Model.Entity.Compra;
+import com.example.taller2sidatech.Model.Entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +53,10 @@ public class CompraServiceImp implements ICompraService {
 
         return numeroConcatenado;
 
+    }
+
+    @Override
+    public List<Compra> findByUsuario(Usuario usuario) {
+        return compraDao.findByUsuario(usuario);
     }
 }

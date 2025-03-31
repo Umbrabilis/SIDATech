@@ -14,7 +14,7 @@ public class DetalleCompra {
     private double precio;
     private double total;
 
-    @OneToOne
+    @ManyToOne
     private Compra compra;
 
     @ManyToOne
