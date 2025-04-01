@@ -28,7 +28,7 @@ public class UsuarioController {
     @Autowired
     private ICompraService compraService;
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/registro")
     public String create(){
@@ -38,9 +38,8 @@ public class UsuarioController {
     @PostMapping("/save")
     public String save(Usuario usuario){
         usuario.setTipo("USER");
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuario.setPassword(passEncoder.encode(usuario.getPassword()));
         usuarioService.save(usuario);
-
         return "redirect:/";
 
     }
@@ -50,10 +49,10 @@ public class UsuarioController {
         return "usuario/login";
     }
 
-    @PostMapping("/acceder")
+    @GetMapping("/acceder")
     public String acceder(Usuario usuario, HttpSession session){
 
-        Optional<Usuario> user = usuarioService.findByEmail(usuario.getEmail());
+        Optional<Usuario> user = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
 
         if (user.isPresent()) {
             session.setAttribute("idusuario", user.get().getId());
