@@ -26,6 +26,7 @@ public class SpringBootSecurity {
                 .and()
                 .formLogin()
                 .loginPage("/usuario/login")
+                .failureUrl("/usuario/login?error=true") // Redirigir en caso de error
                 .permitAll()
                 .defaultSuccessUrl("/usuario/acceder");
 

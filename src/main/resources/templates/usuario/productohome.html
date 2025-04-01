@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Spring eCommerce</title>
+  <title>SidaTech Shop</title>
 
 
   <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -21,14 +21,16 @@
 <body>
 
   <!-- Navigation -->
-  <div th:include="usuario/template_usuario::header"></div>
+  <div th:include="usuario/template_usuario::header" th:if="${sesion==null}"></div>
+  <div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}"></div>
+
     <!-- Page Content -->
     <div class="container">
 
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">
-        Spring eCommerce <small>Producto</small>
+        SidaTech Shop <small>Producto</small>
       </h1>
 
       <ol class="breadcrumb">
