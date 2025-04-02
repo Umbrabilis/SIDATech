@@ -34,4 +34,10 @@ public class UsuarioServiceImp implements IUsuarioService {
         return IUsuarioDao.findByEmail(email);
     }
 
+    @Override
+    public void update(Usuario usuario) {IUsuarioDao.save(usuario);}
+
+    @Override
+    public void delete(Integer id) { IUsuarioDao.deleteById(id);}
+
 }

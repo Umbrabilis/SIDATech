@@ -46,6 +46,11 @@ public class ProductoController {
 
     @PostMapping("/save")
     public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
+        // Validación de stock negativo
+        if (producto.getStock() < 0) {
+            producto.setStock(0);
+        }
+
         Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         producto.setUsuario(usuario);
 
@@ -63,23 +68,31 @@ public class ProductoController {
     public String edit(@PathVariable Integer id, Model model){
         Producto producto = new Producto();
         Optional<Producto> optionalProducto = IProductoService.get(id);
-        producto= optionalProducto.get();
+        producto = optionalProducto.get();
+
+        // Asegurar que el stock no se muestre como negativo
+        if(producto.getStock() < 0) {
+            producto.setStock(0);
+        }
 
         model.addAttribute("producto", producto);
         return "productos/edit";
     }
 
     @PostMapping("/update")
-    public String update(Producto producto,  @RequestParam("img") MultipartFile file) throws IOException {
+    public String update(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+        // Validación de stock negativo
+        if (producto.getStock() < 0) {
+            producto.setStock(0);
+        }
+
         Producto p = new Producto();
         p = IProductoService.get(producto.getId()).get();
 
         if (file.isEmpty()){ //editamos producto sin cambiar imagen
-
             producto.setImagen(p.getImagen());
         }
         else { //editamos producto cambiando imagen
-
             if (!p.getImagen().equals("default.jpg")){
                 upload.deleteImage(p.getImagen());
             }

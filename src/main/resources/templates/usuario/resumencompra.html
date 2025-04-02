@@ -3,12 +3,12 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>SidaTech Shop</title>
+    <title>SidaTech Shop</title>
 
 
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -20,85 +20,85 @@
 
 <body>
 
-  <!-- Navigation -->
-  <div th:include="usuario/template_usuario::header" th:if="${sesion==null}"></div>
-  <div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}"></div>
+<!-- Navigation -->
+<div th:include="usuario/template_usuario::header" th:if="${sesion==null}"></div>
+<div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}"></div>
 
-    <!-- Page Content -->
-    <div class="container">
+<!-- Page Content -->
+<div class="container">
 
 
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">
         Spring eCommerce <small>Resumen de la orden</small>
-      </h1>
+    </h1>
 
-      <ol class="breadcrumb">
+    <ol class="breadcrumb">
         <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
         <li class="breadcrumb-item active">Orden</li>
-      </ol>
+    </ol>
 
-      <!-- Blog Post -->
-      <div class="card mb-4">
+    <!-- Blog Post -->
+    <div class="card mb-4">
         <div class="card-body">
-          <div class="row">
-           <div class="col-lg-9">
-             <div class="card-body">
-              <h5 class="card-title">
-                DATOS ORDEN
-              </h5>
-              <h6 th:text=" 'Nombre: ' + ${usuario.nombre}"> </h6>
-              <h6 th:text=" 'Correo: ' + ${usuario.email}"> </h6>
-              <h6 th:text=" 'Direccion: ' + ${usuario.direccion}"></h6>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            DATOS ORDEN
+                        </h5>
+                        <h6 th:text=" 'Nombre: ' + ${usuario.nombre}"> </h6>
+                        <h6 th:text=" 'Correo: ' + ${usuario.email}"> </h6>
+                        <h6 th:text=" 'Direccion: ' + ${usuario.direccion}"></h6>
 
-              <h5 class="card-title">
-                PRODUCTOS
-              </h5>
-              <div class="alert alert-light" role="alert">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Producto</th>
-                      <th scope="col">Precio</th>
-                      <th scope="col">Cantidad</th>
-                      <th scope="col">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="dtcompra:${cart}">
-                     <td th:text="${dtcompra.nombre}"></td>
-                     <td th:text="${dtcompra.precio}"></td>
-                     <td th:text="${dtcompra.cantidad}"></td>
-                     <td th:text="${dtcompra.total}"></td>
-                   </tr>
-                 </tbody>
-               </table>
-             </div>
-           </div>
-         </div>
+                        <h5 class="card-title">
+                            PRODUCTOS
+                        </h5>
+                        <div class="alert alert-light" role="alert">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="dtcompra:${cart}">
+                                    <td th:text="${dtcompra.nombre}"></td>
+                                    <td th:text="'COP $' + ${#numbers.formatInteger(dtcompra.precio, 0)}"></td>
+                                    <td th:text="${dtcompra.cantidad}"></td>
+                                    <td th:text="'COP $' + ${#numbers.formatInteger(dtcompra.total, 0)}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-         <div class="col-lg-3">
-          <h2 class="card-title">Resumen Orden</h2>
+                <div class="col-lg-3">
+                    <h2 class="card-title">Resumen Orden</h2>
 
-          <ul class="list-group">
-            <li class="list-group-item"><h5 th:text="'Total: ' + ${compra.total}"></h5></li>
-            <a th:href="@{saveOrder}" class="btn btn-dark">Generar</a>
-          </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item"><h5 th:text="'Total: COP $' + ${#numbers.formatInteger(compra.total, 0)}"></h5></li>
+                        <a th:href="@{saveOrder}" class="btn btn-dark">Generar</a>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-    </div>
-      </div>
-  <!-- /.container -->
+</div>
+</div>
+<!-- /.container -->
 
-  <!-- Footer -->
-        <div th:include="usuario/template_usuario::footer"></div>
+<!-- Footer -->
+<div th:include="usuario/template_usuario::footer"></div>
 
 
-        <!-- Bootstrap core JavaScript -->
-        <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-        <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 </body>
 
