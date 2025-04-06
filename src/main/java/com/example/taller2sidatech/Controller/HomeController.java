@@ -50,7 +50,7 @@ public class HomeController {
     }
 
     @GetMapping("/productohome/{id}")
-    public String productoHome(@PathVariable Integer id, Model model){
+    public String productoHome(@PathVariable Integer id, Model model) {
 
         Producto producto = new Producto();
         Optional<Producto> productoOptional = IProductoService.get(id);
@@ -64,7 +64,7 @@ public class HomeController {
     public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
         DetalleCompra detalleCompra = new DetalleCompra();
         Producto producto = new Producto();
-        double sumaTotal=0;
+        double sumaTotal = 0;
 
         Optional<Producto> optionalProducto = IProductoService.get(id);
         producto = optionalProducto.get();
@@ -78,12 +78,12 @@ public class HomeController {
         //Verificar si el producto ya existe en el carrito
         Integer idproducto = producto.getId();
         boolean ingresado = detalles.stream().anyMatch(p -> p.getProducto().getId() == idproducto);
-        if (!ingresado){
+        if (!ingresado) {
             detalles.add(detalleCompra);
         }
 
 
-        sumaTotal= detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
+        sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
         compra.setTotal(sumaTotal);
         model.addAttribute("cart", detalles);
         model.addAttribute("compra", compra);
@@ -102,10 +102,10 @@ public class HomeController {
             }
         }
         //Nueva lista con productos restantes
-        detalles= comprasNueva;
+        detalles = comprasNueva;
 
-        double sumaTotal=0;
-        sumaTotal= detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
+        double sumaTotal = 0;
+        sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
         compra.setTotal(sumaTotal);
         model.addAttribute("cart", detalles);
         model.addAttribute("compra", compra);
@@ -169,5 +169,5 @@ public class HomeController {
 
         return "usuario/home";
     }
-
 }
+

@@ -45,35 +45,60 @@
       </div>
     </div>
   </div>
-  <form th:action="@{/usuario/save}" method="post">
+
+  <!-- Mensajes de validación -->
+  <div id="error-messages" class="alert alert-danger d-none" role="alert">
+    Por favor corrija los errores antes de continuar.
+  </div>
+
+  <form th:action="@{/usuario/save}" method="post" id="registroForm" onsubmit="return validarFormulario()">
     <div class="form-group">
-      <label for="nombres">Nombres:</label> <input type="text"
-                                                   class="form-control" id="nombre" name="nombre" required
-                                                   placeholder="Ingrese sus nombres" autocomplete="off">
+      <label for="nombre">Nombres:</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" required
+             placeholder="Ingrese sus nombres" autocomplete="off"
+             pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]{3,50}$"
+             title="El nombre debe contener solo letras y espacios (3-50 caracteres)">
     </div>
 
     <div class="form-group">
-      <label for="email">Email:</label> <input type="email"
-                                               class="form-control" id="email" name="email" required
-                                               placeholder="Ingrese su email" autocomplete="off">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" name="email" required
+             placeholder="Ingrese su email" autocomplete="off"
+             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+             title="Ingrese un correo electrónico válido (ejemplo: usuario@dominio.com)">
     </div>
 
     <div class="form-group">
-      <label for="direccion">Dirección:</label> <input type="text"
-                                                       class="form-control" id="direccion" name="direccion" required
-                                                       placeholder="Ingrese su dirección" autocomplete="off">
+      <label for="direccion">Dirección:</label>
+      <input type="text" class="form-control" id="direccion" name="direccion" required
+             placeholder="Ingrese su dirección" autocomplete="off"
+             pattern="^[A-Za-z0-9À-ÖØ-öø-ÿ\s,.#-]{5,100}$"
+             title="La dirección debe tener entre 5 y 100 caracteres">
     </div>
 
     <div class="form-group">
-      <label for="telefono">Teléfono:</label> <input type="text"
-                                                     class="form-control" id="telefono" name="telefono"
-                                                     placeholder="Ingrese su número de teléfono" autocomplete="off">
+      <label for="telefono">Teléfono:</label>
+      <input type="text" class="form-control" id="telefono" name="telefono"
+             placeholder="Ingrese su número de teléfono" autocomplete="off"
+             pattern="^\+?[0-9]{7,15}$"
+             title="Ingrese un número telefónico válido (7-15 dígitos, puede incluir + al inicio)">
     </div>
 
     <div class="form-group">
-      <label for="pwd">Contraseña</label> <input type="password"
-                                                 class="form-control" id="password" name="password" required placeholder="Ingrese su contraseña" autocomplete="off">
+      <label for="password">Contraseña:</label>
+      <input type="password" class="form-control" id="password" name="password" required
+             placeholder="Ingrese su contraseña" autocomplete="off"
+             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+             title="La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número">
     </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirmar Contraseña:</label>
+      <input type="password" class="form-control" id="confirmPassword" required
+             placeholder="Confirme su contraseña" autocomplete="off">
+      <small id="passwordError" class="form-text text-danger d-none">Las contraseñas no coinciden.</small>
+    </div>
+
     <div class="col-sm-2">
       <button type="submit" class="btn btn-success">Guardar</button>
     </div>
@@ -87,5 +112,29 @@
 <!-- Bootstrap core JavaScript -->
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Script de validación -->
+<script>
+  function validarFormulario() {
+    const errorMessages = document.getElementById('error-messages');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordError = document.getElementById('passwordError');
+
+    // Reiniciar mensajes de error
+    errorMessages.classList.add('d-none');
+    passwordError.classList.add('d-none');
+
+    // Validar coincidencia de contraseñas
+    if (password.value !== confirmPassword.value) {
+      passwordError.classList.remove('d-none');
+      errorMessages.classList.remove('d-none');
+      errorMessages.textContent = 'Las contraseñas no coinciden.';
+      return false;
+    }
+
+    return true;
+  }
+</script>
 </body>
 </html>
