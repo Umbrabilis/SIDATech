@@ -77,6 +77,8 @@ public class PdfService {
         Paragraph customerHeader = new Paragraph("DATOS DEL CLIENTE", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
         document.add(customerHeader);
 
+        document.add(new Paragraph(" "));  // Agrega una línea en blanco
+
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(100);
 
@@ -99,6 +101,8 @@ public class PdfService {
     private void addItemsTable(Document document, Compra compra) throws DocumentException {
         Paragraph itemsHeader = new Paragraph("PRODUCTOS", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
         document.add(itemsHeader);
+
+        document.add(new Paragraph(" "));  // Agrega una línea en blanco
 
         PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
