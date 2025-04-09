@@ -143,9 +143,7 @@ public class HomeController {
 
     @GetMapping("/order")
     public String order(Model model, HttpSession session) {
-        // Verificar si el usuario está logueado
         if (session.getAttribute("idusuario") == null) {
-            // Si no hay sesión, redirigir al login
             return "redirect:/usuario/login";
         }
 

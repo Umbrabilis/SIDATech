@@ -21,22 +21,16 @@ public class PdfService {
 
         document.open();
 
-        // Logo and header
         addHeaderAndLogo(document);
 
-        // Invoice details
         addInvoiceDetails(document, compra);
 
-        // Customer info
         addCustomerInfo(document, usuario);
 
-        // Items table
         addItemsTable(document, compra);
 
-        // Total amount
         addTotalAmount(document, compra);
 
-        // Footer
         addFooter(document);
 
         document.close();

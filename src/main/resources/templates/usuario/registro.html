@@ -68,7 +68,7 @@
       <label for="email">Email:</label>
       <input type="email" class="form-control" id="email" name="email" required
              placeholder="Ingrese su email" autocomplete="off"
-             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,}$"
+             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
              title="Ingrese un correo electrónico válido (ejemplo: usuario@dominio.com)">
     </div>
 
@@ -124,12 +124,31 @@
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
     const passwordError = document.getElementById('passwordError');
+    const email = document.getElementById('email');
 
     // Reiniciar mensajes de error
     errorMessages.classList.add('d-none');
     passwordError.classList.add('d-none');
 
-    // Verificar longitud mínima
+    // Validar email
+    const emailValue = email.value;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(emailValue)) {
+      errorMessages.classList.remove('d-none');
+      errorMessages.textContent = 'Ingrese un correo electrónico válido con un dominio correcto (ejemplo: usuario@dominio.com)';
+      return false;
+    }
+
+    // Asegurarse que el dominio sea válido
+    const domainPart = emailValue.split('@')[1];
+    if (!domainPart || !domainPart.includes('.') || domainPart.split('.')[1].length < 2) {
+      errorMessages.classList.remove('d-none');
+      errorMessages.textContent = 'El correo debe terminar con un dominio válido como .com, .org, .net, etc.';
+      return false;
+    }
+
+    // Verificar longitud mínima de contraseña
     if (password.value.length < 8) {
       errorMessages.classList.remove('d-none');
       errorMessages.textContent = 'La contraseña debe tener al menos 8 caracteres.';

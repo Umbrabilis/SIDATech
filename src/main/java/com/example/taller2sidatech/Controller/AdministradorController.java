@@ -101,7 +101,6 @@ public class AdministradorController {
     @GetMapping("/factura/{id}")
     public void descargarFactura(@PathVariable Integer id, HttpServletResponse response, HttpSession session) {
         try {
-            // Get the purchase data
             Optional<Compra> optionalCompra = compraService.findById(id);
             Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 
