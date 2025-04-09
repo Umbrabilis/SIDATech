@@ -6,6 +6,7 @@ import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.ICompraService;
 import com.example.taller2sidatech.Service.IProductoService;
 import com.example.taller2sidatech.Service.IUsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +32,15 @@ public class AdministradorController {
     private ICompraService compraService;
 
     @GetMapping("")
-    public String home(Model model ){
+    public String home(Model model, HttpSession session) {
+        // Verificar si el usuario es un administrador
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).orElse(null);
+        if (usuario == null || !usuario.getTipo().equals("ADMIN")) {
+            return "redirect:/";  // Redirigir al inicio si no es administrador
+        }
+
         List<Producto> productos = IProductoService.findAll();
         model.addAttribute("productos", productos);
-
         return "administrador/home";
     }
 

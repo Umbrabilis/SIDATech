@@ -21,14 +21,17 @@ public class SpringBootSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/administrador/**").hasRole("ADMIN")
-                .requestMatchers("/productos/**").hasRole("ADMIN")
+                .requestMatchers("/administrador/**").hasAuthority("ADMIN")
+                .requestMatchers("/productos/**").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/usuario/login")
-                .failureUrl("/usuario/login?error=true") // Redirigir en caso de error
+                .failureUrl("/usuario/login?error=true")
                 .permitAll()
-                .defaultSuccessUrl("/usuario/acceder");
+                .defaultSuccessUrl("/usuario/acceder")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/"); // Redirige a la página principal cuando se deniega el acceso
 
         return http.build();
     }

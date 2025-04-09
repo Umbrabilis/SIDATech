@@ -22,7 +22,8 @@
 
 <!-- Navigation -->
 <div th:include="usuario/template_usuario::header" th:if="${sesion==null}"></div>
-<div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}"></div>
+<div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}" th:if="${admin==null}"></div>
+<div th:include="usuario/template_usuario::header-admin" th:if="${admin==true}"></div>
 
 <!-- Page Content -->
 <div class="container">

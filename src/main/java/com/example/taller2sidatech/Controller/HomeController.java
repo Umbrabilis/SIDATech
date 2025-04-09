@@ -41,22 +41,41 @@ public class HomeController {
 
     @GetMapping("")
     public String home(Model model, HttpSession session) {
-
         model.addAttribute("productos", IProductoService.findAll());
 
-        //session
-        model.addAttribute("sesion", session.getAttribute("idusuario"));
+        Integer userId = (Integer) session.getAttribute("idusuario");
+        model.addAttribute("sesion", userId);
+
+        if (userId != null) {
+            Optional<Usuario> usuario = usuarioService.findById(userId);
+            if (usuario.isPresent() && "ADMIN".equals(usuario.get().getTipo())) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "usuario/home";
     }
 
     @GetMapping("/productohome/{id}")
-    public String productoHome(@PathVariable Integer id, Model model) {
-
+    public String productoHome(@PathVariable Integer id, Model model, HttpSession session) {
         Producto producto = new Producto();
         Optional<Producto> productoOptional = IProductoService.get(id);
         producto = productoOptional.get();
 
         model.addAttribute("producto", producto);
+
+        // Add session attribute
+        Integer userId = (Integer) session.getAttribute("idusuario");
+        model.addAttribute("sesion", userId);
+
+        // Check if user is admin and add flag to model
+        if (userId != null) {
+            Optional<Usuario> usuario = usuarioService.findById(userId);
+            if (usuario.isPresent() && "ADMIN".equals(usuario.get().getTipo())) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "usuario/productohome";
     }
 

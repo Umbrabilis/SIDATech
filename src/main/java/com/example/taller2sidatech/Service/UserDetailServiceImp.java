@@ -32,10 +32,12 @@ public class UserDetailServiceImp implements UserDetailsService {
         if (optionalUsuario.isPresent()) {
             session.setAttribute("idusuario", optionalUsuario.get().getId());
             Usuario usuario = optionalUsuario.get();
+
+            // Construir usuario con authorities en lugar de roles
             return User.builder()
                     .username(usuario.getEmail())
-                    .password(usuario.getPassword()) // No recodificar la contraseña
-                    .roles(usuario.getTipo())
+                    .password(usuario.getPassword())
+                    .authorities(usuario.getTipo()) // Usar la autoridad directamente
                     .build();
         } else {
             throw new UsernameNotFoundException("Usuario no encontrado");

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -33,15 +34,6 @@ public class UsuarioController {
     @GetMapping("/registro")
     public String create(){
         return "usuario/registro";
-    }
-
-    @PostMapping("/save")
-    public String save(Usuario usuario){
-        usuario.setTipo("USER");
-        usuario.setPassword(passEncoder.encode(usuario.getPassword()));
-        usuarioService.save(usuario);
-        return "redirect:/";
-
     }
 
     @GetMapping("/login")
@@ -90,6 +82,29 @@ public class UsuarioController {
     public String logout(HttpSession session) {
         session.removeAttribute("idusuario");
         return "redirect:/";
+    }
+
+    @PostMapping("/save")
+    public String save(Usuario usuario, Model model, RedirectAttributes redirectAttributes) {
+        // Validar formato de contraseña
+        if (!usuario.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+            // Usar redirectAttributes para mensajes flash que sobreviven redirecciones
+            redirectAttributes.addFlashAttribute("error", "La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número.");
+            return "redirect:/usuario/registro";
+        }
+
+        // Verificar si el correo ya existe
+        Optional<Usuario> usuarioExistente = usuarioService.findByEmail(usuario.getEmail());
+        if (usuarioExistente.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Este correo electrónico ya está registrado.");
+            return "redirect:/usuario/registro";
+        }
+
+        usuario.setTipo("USER");
+        usuario.setPassword(passEncoder.encode(usuario.getPassword()));
+        usuarioService.save(usuario);
+        redirectAttributes.addFlashAttribute("success", "Usuario registrado correctamente");
+        return "redirect:/usuario/login";
     }
 
 
