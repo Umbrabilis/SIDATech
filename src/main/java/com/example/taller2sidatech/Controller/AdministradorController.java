@@ -6,8 +6,13 @@ import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.ICompraService;
 import com.example.taller2sidatech.Service.IProductoService;
 import com.example.taller2sidatech.Service.IUsuarioService;
+import com.example.taller2sidatech.Service.PdfService;
+import com.itextpdf.text.DocumentException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +36,9 @@ public class AdministradorController {
 
     @Autowired
     private ICompraService compraService;
+
+    @Autowired
+    private PdfService pdfService;
 
     @GetMapping("")
     public String home(Model model, HttpSession session) {
@@ -87,5 +96,34 @@ public class AdministradorController {
         Compra compra = compraService.findById(id).get();
         model.addAttribute("detalles", compra.getDetalleCompras());
         return "administrador/detallecompra";
+    }
+
+    @GetMapping("/factura/{id}")
+    public void descargarFactura(@PathVariable Integer id, HttpServletResponse response, HttpSession session) {
+        try {
+            // Get the purchase data
+            Optional<Compra> optionalCompra = compraService.findById(id);
+            Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+
+            // Un administrador puede acceder a cualquier factura
+            if (optionalCompra.isPresent()) {
+                Compra compra = optionalCompra.get();
+                // Use the user associated with the purchase, not the admin
+                Usuario usuarioCompra = compra.getUsuario();
+
+                // Generate PDF
+                byte[] pdfBytes = pdfService.generateInvoice(compra, usuarioCompra);
+
+                // Configure response
+                response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + compra.getNumero() + ".pdf");
+
+                // Write PDF to response
+                response.getOutputStream().write(pdfBytes);
+                response.getOutputStream().flush();
+            }
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }

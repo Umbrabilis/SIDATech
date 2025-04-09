@@ -17,13 +17,17 @@
   <!-- Custom styles for this template -->
   <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body>
 
 <!-- Navigation -->
 <div th:include="usuario/template_usuario::header" th:if="${sesion==null}"></div>
-<div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}"></div>
+<div th:include="usuario/template_usuario::header-user" th:unless="${sesion==null}" th:if="${admin==null}"></div>
+<div th:include="usuario/template_usuario::header-admin" th:if="${admin==true}"></div>
 
 <!-- Page Content -->
 <div class="container">
@@ -63,6 +67,13 @@
             </tr>
             </tbody>
           </table>
+
+          <!-- Botón para descargar factura -->
+          <div class="text-right mt-3">
+            <a th:href="@{/usuario/factura/{id} (id=${detalles[0].compra.id})}" class="btn btn-primary">
+              <i class="fas fa-file-pdf"></i> Descargar Factura
+            </a>
+          </div>
         </div>
       </div>
     </div>

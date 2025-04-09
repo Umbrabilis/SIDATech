@@ -17,64 +17,74 @@
   <!-- Custom styles for this template -->
   <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <div th:include="administrador/template_admin::header"></div>
+<!-- Navigation -->
+<div th:include="administrador/template_admin::header"></div>
 
-    <!-- Page Content -->
-    <div class="container">
+<!-- Page Content -->
+<div class="container">
 
 
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
-        SidaTech Shop <small>Compras</small>
-      </h1>
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">
+    SidaTech Shop <small>Compras</small>
+  </h1>
 
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/administrador}">Home</a></li>
-        <li class="breadcrumb-item active">Compras</li>
-      </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a th:href="@{/administrador}">Home</a></li>
+    <li class="breadcrumb-item active">Compras</li>
+  </ol>
 
-      <!-- Blog Post -->
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row">
-           <div class="col-lg-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">No. de Orden</th>
-                  <th scope="col">Fecha</th>
-                  <th scope="col">Valor</th>
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr th:each="compra : ${compras}">
-                  <td th:text="${compra.numero}"></td>
-                  <td th:text="${compra.fechaCreacion}"></td>
-                  <td th:text="${compra.total}"></td>
-                  <td><a th:href="@{/administrador/detalle/{id} (id = ${compra.id})}" class="btn btn-success">Ver Detalle</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <!-- Blog Post -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">No. de Orden</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="compra : ${compras}">
+              <td th:text="${compra.numero}"></td>
+              <td th:text="${compra.fechaCreacion}"></td>
+              <td th:text="'COP $' + ${#numbers.formatInteger(compra.total, 0)}"></td>
+              <td>
+                <a th:href="@{/administrador/detalle/{id} (id = ${compra.id})}" class="btn btn-success">
+                  <i class="fas fa-eye"></i> Ver Detalle
+                </a>
+                <a th:href="@{/administrador/factura/{id} (id = ${compra.id})}" class="btn btn-primary ml-2">
+                  <i class="fas fa-file-pdf"></i> Descargar Factura
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-  <!-- /.container -->
+</div>
+<!-- /.container -->
 
-  <!-- Footer -->
-  <div th:include="administrador/template_admin::footer"></div>
+<!-- Footer -->
+<div th:include="administrador/template_admin::footer"></div>
 
 
-  <!-- Bootstrap core JavaScript -->
-  <script th:src="@{vendor/jquery/jquery.min.js}"></script>
-  <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 </body>
 

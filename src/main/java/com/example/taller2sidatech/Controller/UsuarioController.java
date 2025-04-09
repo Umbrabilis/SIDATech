@@ -4,8 +4,13 @@ import com.example.taller2sidatech.Model.Entity.Compra;
 import com.example.taller2sidatech.Model.Entity.Usuario;
 import com.example.taller2sidatech.Service.ICompraService;
 import com.example.taller2sidatech.Service.IUsuarioService;
+import com.example.taller2sidatech.Service.PdfService;
+import com.itextpdf.text.DocumentException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +34,9 @@ public class UsuarioController {
 
     @Autowired
     private ICompraService compraService;
+
+    @Autowired
+    private PdfService pdfService;
 
     BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 
@@ -105,6 +114,33 @@ public class UsuarioController {
         usuarioService.save(usuario);
         redirectAttributes.addFlashAttribute("success", "Usuario registrado correctamente");
         return "redirect:/usuario/login";
+    }
+
+    @GetMapping("/factura/{id}")
+    public void descargarFactura(@PathVariable Integer id, HttpServletResponse response, HttpSession session) {
+        try {
+            // Get the purchase and user data
+            Optional<Compra> optionalCompra = compraService.findById(id);
+            Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+
+            // Validate purchase belongs to user
+            if (optionalCompra.isPresent() && optionalCompra.get().getUsuario().getId().equals(usuario.getId())) {
+                Compra compra = optionalCompra.get();
+
+                // Generate PDF
+                byte[] pdfBytes = pdfService.generateInvoice(compra, usuario);
+
+                // Configure response
+                response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=factura-" + compra.getNumero() + ".pdf");
+
+                // Write PDF to response
+                response.getOutputStream().write(pdfBytes);
+                response.getOutputStream().flush();
+            }
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
