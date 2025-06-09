@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerProducto } from '../services/productoService';
+import { obtenerProducto } from '../../services/productoService';
 
 function ProductoDetalle() {
     const [producto, setProducto] = useState(null);

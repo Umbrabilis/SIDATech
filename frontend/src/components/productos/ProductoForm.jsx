@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { crearProducto, actualizarProducto } from '../services/productoService';
+import { crearProducto, actualizarProducto } from '../../services/productoService';
 
 function ProductoForm({ producto = null, onSave, onCancel }) {
     const [formData, setFormData] = useState({

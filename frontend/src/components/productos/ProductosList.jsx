@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { obtenerProductos, eliminarProducto } from '../services/productoService';
+import { obtenerProductos, eliminarProducto } from '../../services/productoService';
 import ProductoForm from './ProductoForm';
 
 function ProductosList() {

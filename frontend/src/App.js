@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import ProductosList from './components/ProductosList';
-import ProductoDetalle from './components/ProductoDetalle';
+import ProductosList from './components/productos/ProductosList';
+import ProductoDetalle from './components/productos/ProductoDetalle';
 import ErrorBoundary from './components/ErrorBoundary';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
